@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AttendEase | Attendance Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">A</span><div><strong>AttendEase</strong><small>Attendance portal</small></div></div>
+    <nav>
+      <button class="nav-link active" data-view="dashboard">▦ &nbsp; Dashboard</button>
+      <button class="nav-link" data-view="students">♙ &nbsp; Students</button>
+      <button class="nav-link" data-view="subjects">▤ &nbsp; Subjects</button>
+      <button class="nav-link" data-view="attendance">✓ &nbsp; Mark attendance</button>
+      <button class="nav-link" data-view="reports">▥ &nbsp; Reports</button>
+    </nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span> MongoDB-powered portal</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">COLLEGE ADMINISTRATION</p><h1 id="page-title">Dashboard</h1></div><div class="user-chip"><span class="avatar">AD</span><div><strong>Administrator</strong><small>Attendance manager</small></div></div></header>
+    <div id="notice" class="notice hidden" role="status"></div>
+    <section class="view" id="view-dashboard">
+      <div class="welcome"><div><p class="eyebrow light">YOUR CLASSROOM, AT A GLANCE</p><h2>Attendance overview</h2><p>Manage student records and track attendance in one place.</p></div><div class="welcome-icon">✓</div></div>
+      <div class="stats">
+        <article class="stat-card"><div class="stat-icon purple">♙</div><p>Total students</p><strong id="stat-students">0</strong><small>Registered students</small></article>
+        <article class="stat-card"><div class="stat-icon blue">▤</div><p>Total subjects</p><strong id="stat-subjects">0</strong><small>Available subjects</small></article>
+        <article class="stat-card"><div class="stat-icon green">✓</div><p>Attendance records</p><strong id="stat-records">0</strong><small>Saved attendance entries</small></article>
+        <article class="stat-card"><div class="stat-icon orange">%</div><p>Average attendance</p><strong id="stat-average">0%</strong><small>Across recorded entries</small></article>
+      </div>
+      <div class="panel"><div class="panel-heading"><div><h3>Quick actions</h3><p>Choose what you want to do next.</p></div></div><div class="quick-actions"><button class="action-card" data-go="students"><span>＋</span><b>Add a student</b><small>Register a student</small></button><button class="action-card" data-go="subjects"><span>＋</span><b>Add a subject</b><small>Create a subject</small></button><button class="action-card" data-go="attendance"><span>✓</span><b>Mark attendance</b><small>Save today's status</small></button><button class="action-card" data-go="reports"><span>▥</span><b>View reports</b><small>Check attendance %</small></button></div></div>
+      <div class="panel"><div class="panel-heading"><div><h3>Recent attendance</h3><p>The latest saved attendance entries.</p></div><button class="text-button" data-go="attendance">Mark attendance →</button></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>SUBJECT</th><th>DATE</th><th>STATUS</th></tr></thead><tbody id="recent-table"></tbody></table></div></div>
+    </section>
+    <section class="view hidden" id="view-students">
+      <div class="split">
+        <div class="panel"><div class="panel-heading"><div><h3>Add student</h3><p>Enter the student's details.</p></div></div>
+          <form id="student-form" class="form-grid"><label>Roll number<input name="rollNo" required placeholder="e.g. 1EP23CS001"></label><label>Full name<input name="name" required placeholder="Student name"></label><label>Class / section<input name="className" required placeholder="e.g. 3rd Year ISE"></label><label>Email (optional)<input name="email" type="email" placeholder="student@example.com"></label><button class="primary full" type="submit">＋ Add student</button></form>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h3>Student records</h3><p id="student-count-label">0 students</p></div></div><input id="student-search" class="search" placeholder="Search by roll number or name…"><div id="students-list" class="record-list"></div></div>
+      </div>
+    </section>
+    <section class="view hidden" id="view-subjects">
+      <div class="split">
+        <div class="panel"><div class="panel-heading"><div><h3>Add subject</h3><p>Create a subject for attendance.</p></div></div>
+          <form id="subject-form" class="form-grid"><label>Subject code<input name="code" required placeholder="e.g. 21CS61"></label><label>Subject name<input name="name" required placeholder="e.g. Database Management"></label><label>Faculty name (optional)<input name="teacher" placeholder="Faculty name"></label><button class="primary full" type="submit">＋ Add subject</button></form>
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h3>Subject records</h3><p>Subjects currently available.</p></div></div><div id="subjects-list" class="record-list"></div></div>
+      </div>
+    </section>
+    <section class="view hidden" id="view-attendance">
+      <div class="panel"><div class="panel-heading"><div><h3>Mark student attendance</h3><p>Select a student, subject, date and status. Saving again updates that student's status for the same subject and date.</p></div></div>
+        <form id="attendance-form" class="attendance-form"><label>Student<select name="student" id="attendance-student" required><option value="">Choose student</option></select></label><label>Subject<select name="subject" id="attendance-subject" required><option value="">Choose subject</option></select></label><label>Date<input type="date" name="date" id="attendance-date" required></label><label>Status<select name="status" required><option value="Present">Present</option><option value="Absent">Absent</option><option value="Leave">On leave</option></select></label><button class="primary" type="submit">Save attendance</button></form>
+      </div>
+      <div class="panel"><div class="panel-heading"><div><h3>Attendance history</h3><p>Filter by date if needed.</p></div><input type="date" id="history-date" class="date-filter"></div><div class="table-wrap"><table><thead><tr><th>DATE</th><th>ROLL NO.</th><th>STUDENT</th><th>SUBJECT</th><th>STATUS</th></tr></thead><tbody id="attendance-table"></tbody></table></div></div>
+    </section>
+    <section class="view hidden" id="view-reports">
+      <div class="panel"><div class="panel-heading"><div><h3>Student attendance report</h3><p>Attendance percentage = Present records ÷ all recorded attendance records × 100.</p></div><button class="secondary" id="export-csv">Export CSV</button></div><div class="table-wrap"><table><thead><tr><th>ROLL NO.</th><th>STUDENT</th><th>CLASS</th><th>PRESENT</th><th>ABSENT</th><th>LEAVE</th><th>TOTAL</th><th>ATTENDANCE</th></tr></thead><tbody id="reports-table"></tbody></table></div><p class="footnote">This report counts each saved student-subject-date record. It shows 0% when no attendance has been recorded.</p></div>
+    </section>
+    <footer>AttendEase · Student Attendance Management System · Academic project</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
